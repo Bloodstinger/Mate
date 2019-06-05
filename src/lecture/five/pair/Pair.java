@@ -26,7 +26,7 @@ public final class Pair<T, K> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getFirst(), getSecond());
+        return this.first.hashCode()+this.second.hashCode();
     }
 
     public T getFirst() {
