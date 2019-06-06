@@ -1,4 +1,4 @@
-package lecture.five.pair;
+package lecture.six.pair;
 
 import java.util.Objects;
 
@@ -26,7 +26,7 @@ public final class Pair<T, K> {
 
     @Override
     public int hashCode() {
-        return this.first.hashCode()+this.second.hashCode();
+        return this.first.hashCode() + this.second.hashCode();
     }
 
     public T getFirst() {
