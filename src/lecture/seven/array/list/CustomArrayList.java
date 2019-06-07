@@ -1,7 +1,5 @@
 package lecture.seven.array.list;
 
-import org.omg.CORBA.SystemException;
-
 public class CustomArrayList<V> implements List<V> {
     private static final int STARTING_CAPACITY = 10;
     private static final int EMPTY_CAPACITY = 0;
