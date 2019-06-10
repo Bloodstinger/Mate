@@ -1,5 +1,7 @@
 package lecture.seven.array.list;
 
+import java.util.Objects;
+
 public class CustomArrayList<V> implements List<V> {
     private static final int STARTING_CAPACITY = 10;
     private static final int EMPTY_CAPACITY = 0;
@@ -9,7 +11,7 @@ public class CustomArrayList<V> implements List<V> {
     private int arraySize = array.length;
 
     public CustomArrayList() {
-        this.array = EMPTY_ARRAY;
+        this.array = new Object[STARTING_CAPACITY];
     }
 
     public CustomArrayList(int initialCapacity) {
@@ -91,7 +93,7 @@ public class CustomArrayList<V> implements List<V> {
     @Override
     public V get(int index) {
         indexCheck(index);
-        return (V) CustomArrayList.this.array[index];
+        return (V) array[index];
     }
 
     @Override
@@ -111,19 +113,10 @@ public class CustomArrayList<V> implements List<V> {
 
     @Override
     public V remove(V v) {
-        if (v == null) {
-            for (int index = 0; index < arraySize; index++) {
-                if (array[index] == null) {
-                    removeElement(index);
-                    return null;
-                }
-            }
-        } else {
-            for (int index = 0; index < arraySize; index++) {
-                if (v.equals(array[index])) {
-                    removeElement(index);
-                    return (V) array[index];
-                }
+        for (int index = 0; index < arraySize; index++) {
+            if (v.equals(array[index]) || Objects.isNull(v)) {
+                removeElement(index);
+                return (V) array[index];
             }
         }
         return null;
