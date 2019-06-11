@@ -2,10 +2,12 @@ package lecture.eight.linked.list;
 
 import lecture.seven.array.list.NegativeIndexException;
 
+import java.util.Objects;
+
 public class CustomLinkedList<T> implements List<T> {
-    transient private int listSize;
-    transient private Node<T> first;
-    transient private Node<T> last;
+    private int listSize;
+    private Node<T> first;
+    private Node<T> last;
 
     public CustomLinkedList() {
     }
@@ -16,9 +18,9 @@ public class CustomLinkedList<T> implements List<T> {
     }
 
     private static class Node<T> {
-        T item;
-        Node<T> prev;
-        Node<T> next;
+        private T item;
+        private Node<T> prev;
+        private Node<T> next;
 
         Node(Node<T> prev, T object, Node<T> next) {
             this.item = object;
@@ -27,7 +29,7 @@ public class CustomLinkedList<T> implements List<T> {
         }
     }
 
-    private Node<T> node(int index) {
+    private Node<T> getNode(int index) {
         if (index < (listSize >> 1)) {
             Node<T> item = first;
             for (int i = 0; i < index; i++) {
@@ -43,17 +45,20 @@ public class CustomLinkedList<T> implements List<T> {
         }
     }
 
-    private void checkIndex(int index) {
-        if (index > listSize) {
-            throw new IndexOutOfBoundsException();
-        } else if (index < 0) {
-            throw new NegativeIndexException();
+    @Override
+    public Object[] toArray() {
+        Object[] result = new Object[listSize];
+        int i = 0;
+        for (Node<T> node = first; node != null; node = node.next) {
+            result[i++] = node.item;
         }
+        return result;
     }
 
-    private void linkLast(T item) {
-        final Node<T> lastNode = last;
-        final Node<T> newNode = new Node<>(lastNode, item, null);
+    @Override
+    public void add(T value) {
+        Node<T> lastNode = last;
+        Node<T> newNode = new Node<>(lastNode, value, null);
         last = newNode;
         if (lastNode == null) {
             first = newNode;
@@ -63,9 +68,79 @@ public class CustomLinkedList<T> implements List<T> {
         listSize++;
     }
 
-    private void linkBefore(T item, Node<T> nodeAfter) {
-        final Node<T> prev = nodeAfter.prev;
-        final Node<T> newNode = new Node<>(prev, item, nodeAfter);
+    @Override
+    public void add(T value, int index) {
+        checkIndex(index);
+        if (index == listSize) {
+            add(value);
+        } else {
+            linkBeforeNode(value, getNode(index));
+        }
+    }
+
+
+    @Override
+    public void addAll(List<T> list) {
+        Object[] array = list.toArray();
+        for (Object node :
+                array) {
+            add((T) node);
+        }
+    }
+
+    @Override
+    public T get(int index) {
+        checkIndex(index);
+        return getNode(index).item;
+    }
+
+    @Override
+    public void set(T value, int index) {
+        checkIndex(index);
+        Node<T> setNode = getNode(index);
+        setNode.item = value;
+    }
+
+    @Override
+    public T remove(int index) {
+        checkIndex(index);
+        return unlinkNode(getNode(index));
+    }
+
+    @Override
+    public T remove(T t) {
+        if (t == null) {
+            for (Node<T> tNode = first; tNode != null; tNode = tNode.next) {
+                if (Objects.isNull(tNode.item == null) || t.equals(tNode.item)) {
+                    unlinkNode(tNode);
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int size() {
+        return listSize;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return listSize == 0;
+    }
+
+    private void checkIndex(int index) {
+        if (index > listSize) {
+            throw new IndexOutOfBoundsException();
+        } else if (index < 0) {
+            throw new NegativeIndexException();
+        }
+    }
+
+    private void linkBeforeNode(T item, Node<T> nodeAfter) {
+        Node<T> prev = nodeAfter.prev;
+        Node<T> newNode = new Node<>(prev, item, nodeAfter);
         nodeAfter.prev = newNode;
         if (prev == null) {
             first = newNode;
@@ -76,9 +151,9 @@ public class CustomLinkedList<T> implements List<T> {
     }
 
     private T unlinkNode(Node<T> node) {
-        final T item = node.item;
-        final Node<T> nextNode = node.next;
-        final Node<T> prevNode = node.prev;
+        T item = node.item;
+        Node<T> nextNode = node.next;
+        Node<T> prevNode = node.prev;
         if (prevNode == null) {
             first = nextNode;
         } else {
@@ -96,98 +171,6 @@ public class CustomLinkedList<T> implements List<T> {
         node.item = null;
         listSize--;
         return item;
-    }
-
-    @Override
-    public Object[] toArray() {
-        Object[] result = new Object[listSize];
-        int i = 0;
-        for (Node<T> node = first; node != null; node = node.next) {
-            result[i++] = node.item;
-        }
-        return result;
-    }
-
-    @Override
-    public void add(T value) {
-        linkLast(value);
-    }
-
-    @Override
-    public void add(T value, int index) {
-        checkIndex(index);
-        if (index == listSize) {
-            linkLast(value);
-        } else {
-            linkBefore(value, node(index));
-        }
-    }
-
-
-    @Override
-    public void addAll(List<T> list) {
-        Object[] listArray = list.toArray();
-        int length = list.size();
-        Node<T> prevNode;
-        prevNode = last;
-
-        for (Object node :
-                listArray) {
-            T item = (T) node;
-            Node<T> newNode = new Node<>(prevNode, item, null);
-            prevNode.next = newNode;
-            prevNode = newNode;
-        }
-        last = prevNode;
-        listSize += length;
-    }
-
-    @Override
-    public T get(int index) {
-        checkIndex(index);
-        return node(index).item;
-    }
-
-    @Override
-    public void set(T value, int index) {
-        checkIndex(index);
-        Node<T> setNode = node(index);
-        setNode.item = value;
-    }
-
-    @Override
-    public T remove(int index) {
-        checkIndex(index);
-        return unlinkNode(node(index));
-    }
-
-    @Override
-    public T remove(T t) {
-        if (t == null) {
-            for (Node<T> tNode = first; tNode != null; tNode = tNode.next) {
-                if (tNode.item == null) {
-                    unlinkNode(tNode);
-                }
-            }
-        } else {
-            for (Node<T> tNode = first; tNode != null; tNode = tNode.next) {
-                if (t.equals(tNode.item)) {
-                    unlinkNode(tNode);
-                }
-
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public int size() {
-        return listSize;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return listSize == 0;
     }
 
 }
