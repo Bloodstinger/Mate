@@ -2,6 +2,7 @@ package lecture.eight.linked.list;
 
 import lecture.seven.array.list.NegativeIndexException;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class CustomLinkedList<T> implements List<T> {
@@ -108,15 +109,19 @@ public class CustomLinkedList<T> implements List<T> {
 
     @Override
     public T remove(T t) {
+        Node<T> node = first;
         if (t == null) {
-            for (Node<T> tNode = first; tNode != null; tNode = tNode.next) {
-                if (Objects.isNull(tNode.item == null) || t.equals(tNode.item)) {
-                    unlinkNode(tNode);
-                    return t;
-                }
+            while (node.item != null) {
+                node = node.next;
             }
+            unlinkNode(node);
+        } else {
+            while (node.item != t) {
+                node = node.next;
+            }
+            unlinkNode(node);
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     @Override
