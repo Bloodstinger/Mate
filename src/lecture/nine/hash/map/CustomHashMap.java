@@ -34,11 +34,9 @@ public class CustomHashMap<K, V> {
     private static class Node<K, V> {
         private int hash;
         private K key;
-
         private V value;
-
         Node<K, V> next;
-
+        
         public Node(int hash, K key, V value, Node<K, V> next) {
             this.hash = hash;
             this.key = key;
