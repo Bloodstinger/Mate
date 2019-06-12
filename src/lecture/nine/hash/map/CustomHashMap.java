@@ -11,10 +11,32 @@ public class CustomHashMap<K, V> {
     private int threshold;
     private float loadFactor;
 
+    public CustomHashMap(int initialCapacity, float loadFactor) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException();
+        } else if (loadFactor <= 0 || Float.isNaN(loadFactor)) {
+            throw new IllegalArgumentException();
+        }
+        if (initialCapacity > MAXIMUM_CAPACITY) {
+            initialCapacity = MAXIMUM_CAPACITY;
+        }
+        this.loadFactor = loadFactor;
+    }
+
+    public CustomHashMap() {
+        this.loadFactor = LOAD_FACTOR;
+    }
+
+    public CustomHashMap(int initialCapacity) {
+        this(initialCapacity, LOAD_FACTOR);
+    }
+
     private static class Node<K, V> {
         private int hash;
         private K key;
+
         private V value;
+
         Node<K, V> next;
 
         public Node(int hash, K key, V value, Node<K, V> next) {
@@ -41,36 +63,7 @@ public class CustomHashMap<K, V> {
         public boolean hasNext() {
             return this.next != null;
         }
-    }
 
-
-    private static int hash(Object key) {
-        int hash = key.hashCode();
-        if (key == null) {
-            return 0;
-        } else {
-            return hash ^ (hash >>> 16);
-        }
-    }
-
-    public CustomHashMap(int initialCapacity, float loadFactor) {
-        if (initialCapacity < 0) {
-            throw new IllegalArgumentException();
-        } else if (loadFactor <= 0 || Float.isNaN(loadFactor)) {
-            throw new IllegalArgumentException();
-        }
-        if (initialCapacity > MAXIMUM_CAPACITY) {
-            initialCapacity = MAXIMUM_CAPACITY;
-        }
-        this.loadFactor = loadFactor;
-    }
-
-    public CustomHashMap() {
-        this.loadFactor = LOAD_FACTOR;
-    }
-
-    public CustomHashMap(int initialCapacity) {
-        this(initialCapacity, LOAD_FACTOR);
     }
 
     private Node<K, V> getNode(K key) {
@@ -85,6 +78,19 @@ public class CustomHashMap<K, V> {
             throw new NoSuchElementException("Wrong key");
         }
         return node;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public V put(K key, V value) {
+        putValue(hash(key), key, value);
+        return value;
+    }
+
+    public V get(K key) {
+        return getNode(key).value;
     }
 
     private Node<K, V>[] resizeTable() {
@@ -106,14 +112,14 @@ public class CustomHashMap<K, V> {
         }
         threshold = newThreshold;
         @SuppressWarnings({"unchecked"})
-        Node<K, V>[] newTab = (Node<K,V>[]) new Node[newCapacity];
+        Node<K, V>[] newTab = (Node<K, V>[]) new Node[newCapacity];
         nodeTable = newTab;
         if (oldTab != null) {
             for (Node<K, V> node : oldTab) {
                 if (node != null) {
                     put(node.getKey(), node.getValue());
                     if (node.hasNext()) {
-                        Node<K,V> nodeToCopy = node;
+                        Node<K, V> nodeToCopy = node;
                         while (node.hasNext()) {
                             nodeToCopy = node.next;
                             put(nodeToCopy.getKey(), nodeToCopy.getValue());
@@ -124,6 +130,15 @@ public class CustomHashMap<K, V> {
             size--;
         }
         return newTab;
+    }
+
+    private static int hash(Object key) {
+        int hash = key.hashCode();
+        if (key == null) {
+            return 0;
+        } else {
+            return hash ^ (hash >>> 16);
+        }
     }
 
     private V putValue(int hash, K key, V value) {
@@ -145,7 +160,7 @@ public class CustomHashMap<K, V> {
             oldNode.next = newNode;
         }
         size++;
-        if (size > threshold-1) {
+        if (size > threshold - 1) {
             resizeTable();
         }
         return value;
@@ -153,19 +168,6 @@ public class CustomHashMap<K, V> {
 
     private int bucketNumber(int hashKey, int nodeTabLength) {
         return hashKey % (nodeTabLength - 1);
-    }
-
-    public V put(K key, V value) {
-        putValue(hash(key), key, value);
-        return value;
-    }
-
-    public V get(K key) {
-        return getNode(key).value;
-    }
-
-    public int getSize() {
-        return size;
     }
 
 }
