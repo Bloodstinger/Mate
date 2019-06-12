@@ -82,8 +82,7 @@ public class CustomLinkedList<T> implements List<T> {
     @Override
     public void addAll(List<T> list) {
         Object[] array = list.toArray();
-        for (Object node :
-                array) {
+        for (Object node : array) {
             add((T) node);
         }
     }
