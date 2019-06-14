@@ -151,10 +151,13 @@ public class CustomHashMap<K, V> {
         int bucketNumber = bucketNumber(hash, nodeTab.length);
         if (nodeTab[bucketNumber] == null) {
             nodeTab[bucketNumber] = new Node<>(hash, key, value, null);
-        } else if (oldNode.getKey() == key) {
+        } else if (oldNode.getKey().equals(key)) {
             oldNode.value = value;
         } else {
             while (oldNode.hasNext()) {
+                if (oldNode.getKey().equals(key)) {
+                    oldNode.value = value;
+                }
                 oldNode = oldNode.next;
             }
             oldNode.next = newNode;
