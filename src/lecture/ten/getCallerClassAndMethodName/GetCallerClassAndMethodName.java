@@ -4,8 +4,7 @@ public class GetCallerClassAndMethodName {
     public static String getCallerClassAndMethodName() {
         StackTraceElement[] stackTraceElements = new Throwable().getStackTrace();
         try {
-            String result = stackTraceElements[2].getClassName() + "#" + stackTraceElements[2].getMethodName();
-            return result;
+            return stackTraceElements[2].getClassName() + "#" + stackTraceElements[2].getMethodName();
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
