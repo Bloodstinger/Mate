@@ -51,7 +51,7 @@ public class CustomArrayList<V> implements List<V> {
 
     private void indexCheck(int index) {
         if (index > arraySize) {
-            throw new ArrayAddingIndexException("Index is greater than array size!");
+            throw new ArrayIndexOutOfBoundsException("Index is greater than array size!");
         } else if (index < 0) {
             throw new NegativeIndexException();
         }
