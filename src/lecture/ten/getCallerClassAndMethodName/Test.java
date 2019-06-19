@@ -5,6 +5,7 @@ public class Test {
         System.out.println(GetCallerClassAndMethodName.getCallerClassAndMethodName());
         test();
     }
+
     private static void test() {
         System.out.println(GetCallerClassAndMethodName.getCallerClassAndMethodName());
     }

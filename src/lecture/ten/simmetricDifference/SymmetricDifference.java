@@ -12,6 +12,5 @@ public class SymmetricDifference {
         difference.addAll(set2);
         difference.removeAll(commonness);
         return difference;
-
     }
 }
