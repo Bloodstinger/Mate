@@ -1,5 +1,6 @@
 package lecture.eleven.tertaryOperator;
 
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
