@@ -12,7 +12,6 @@ public class Main {
         new BufferedReader(new InputStreamReader(System.in))
                 .lines()
                 .flatMap(x -> Stream.of(x.split("[^a-zA-Zа-яА-Я0-9]+")))
-                .filter(t -> !t.isEmpty())
                 .map(String::toLowerCase)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet()
