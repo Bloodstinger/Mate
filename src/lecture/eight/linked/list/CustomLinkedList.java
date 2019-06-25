@@ -142,6 +142,7 @@ public class CustomLinkedList<T> implements List<T> {
         }
     }
 
+
     private void linkBeforeNode(T item, Node<T> nodeAfter) {
         Node<T> prev = nodeAfter.prev;
         Node<T> newNode = new Node<>(prev, item, nodeAfter);
