@@ -3,7 +3,7 @@ package lecture.fifteen.factory;
 import lecture.fifteen.dao.DaoPattern;
 import lecture.fifteen.dao.BetDaoImpl;
 
-public class BetDaoFactory extends AbstractDaoFactory {
+public class BetDaoFactory  {
 
     private static DaoPattern instance;
 

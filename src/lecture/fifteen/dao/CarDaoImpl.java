@@ -10,11 +10,11 @@ import java.util.List;
 public class CarDaoImpl implements CarDao<Car> {
     @Override
     public void add(Car car) {
-        Storage.cars.add(car);
+        Storage.CARS.add(car);
     }
 
     @Override
     public List<Car> getAll() {
-        return Storage.cars;
+        return Storage.CARS;
     }
 }
