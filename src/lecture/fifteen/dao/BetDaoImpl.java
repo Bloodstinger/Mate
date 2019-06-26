@@ -18,5 +18,4 @@ public class BetDaoImpl implements BetDao<Bet> {
     public List<Bet> getAll() {
         return Storage.BETS;
     }
-
 }
