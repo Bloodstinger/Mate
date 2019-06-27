@@ -27,15 +27,15 @@ class Mail {
             this.content = content;
         }
 
-        public final String getFrom() {
+        public String getFrom() {
             return from;
         }
 
-        public final String getTo() {
+        public String getTo() {
             return to;
         }
 
-        public final String getContent() {
+        public String getContent() {
             return content;
         }
     }
@@ -71,18 +71,14 @@ class Mail {
         private Map<String, List<T>> mailBox = new HashMap<String, List<T>>() {
             @Override
             public List<T> get(Object key) {
-                if (this.containsKey(key)) {
-                    return super.get(key);
-                } else {
-                    return Collections.emptyList();
-                }
+                return getOrDefault(key, Collections.emptyList());
             }
         };
 
         @Override
         public void accept(MessagePattern<T> messagePattern) {
             List<T> list = mailBox.get(messagePattern.getTo());
-            if (list.size() == 0) {
+            if (list.isEmpty()) {
                 list = new ArrayList<>();
             }
             list.add(messagePattern.getContent());
